@@ -20,7 +20,7 @@ const AccountsCtas: React.FC<AccountsCtasProps> = ({onAccountCreated}) => {
     {
       name: 'Add Account',
       variant: 'outlined',
-      onClick: openCreateAccount,
+      onClick: () => openCreateAccount(),
       startIcon: 'fluent--add-circle-20-regular',
     },
     {
