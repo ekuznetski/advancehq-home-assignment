@@ -86,8 +86,8 @@ const CreateAccountForm: React.FC<CreateAccountFormProps> = ({onCreated}) => {
         rules={{
           required: 'This field is required.',
           pattern: {
-            value: /^\d{9}$/,
-            message: 'Routing number must be exactly 9 digits.',
+            value: /^\d+$/,
+            message: 'Routing number must contain only digits.',
           },
         }}
         render={({field, fieldState}) => (
@@ -97,7 +97,7 @@ const CreateAccountForm: React.FC<CreateAccountFormProps> = ({onCreated}) => {
             fullWidth
             label='Routing Number'
             placeholder='Enter routing number'
-            inputProps={{maxLength: 9, inputMode: 'numeric'}}
+            inputProps={{inputMode: 'numeric'}}
             externalError={!!fieldState.error}
             externalHelperText={fieldState.error?.message}
           />
