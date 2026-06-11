@@ -8,6 +8,8 @@ import {SettingsProvider} from '@core/contexts/settingsContext';
 import {VerticalNavProvider} from '@menu/contexts/verticalNavContext';
 import {GlobalSearchProvider} from '@/@core/contexts/GlobalSearchContext';
 import {UserSessionProvider} from '@components/UserSessionProvider/UserSessionProvider';
+import {ReactQueryDevtools} from '@tanstack/react-query-devtools';
+
 // Util Imports
 import {
   getDemoName,
@@ -49,6 +51,10 @@ const Providers = async props => {
                 position={themeConfig.toastPosition}
                 hideProgressBar
                 rtl={direction === 'rtl'}
+              />
+              <ReactQueryDevtools
+                initialIsOpen={false}
+                buttonPosition='bottom-right'
               />
             </ThemeProvider>
           </SettingsProvider>
