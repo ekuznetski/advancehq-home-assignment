@@ -1,5 +1,4 @@
 'use client';
-import React from 'react';
 
 import {
   Box,
@@ -126,10 +125,12 @@ const Home = () => {
                 <ListItem key={name} disableGutters>
                   <ListItemText
                     primary={
-                      <Typography variant='body2'>
-                        <Chip label={name} size='small' sx={{mr: 1}} />
-                        {desc}
-                      </Typography>
+                      <Stack direction='row' alignItems='center' gap={1}>
+                        <Chip label={name} size='small' />
+                        <Typography variant='body2' component='span'>
+                          {desc}
+                        </Typography>
+                      </Stack>
                     }
                   />
                 </ListItem>
