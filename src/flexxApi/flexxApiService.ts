@@ -43,6 +43,10 @@ class FlexxApiService {
       endpoint: `account/${accountId}/transactions`,
     });
   }
+
+  async fetchTransactions(): Promise<Transaction[]> {
+    return get<Transaction[]>({endpoint: 'transaction'});
+  }
 }
 
 let instance: FlexxApiService | null = null;
