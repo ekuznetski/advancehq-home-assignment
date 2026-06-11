@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {Comparator} from 'lodash';
 
-import {FlexxTableRow, SortOrder} from '../domain/FlexxTable';
+import {FlexxTableRow, isSortableCell, SortOrder} from '../domain/FlexxTable';
 
 function descendingComparator(
   a: FlexxTableRow,
@@ -12,8 +12,10 @@ function descendingComparator(
   if (comparator) {
     return comparator(a?.metadata, b?.metadata) ? -1 : 1;
   }
-  const aValue = a.data[orderBy]?.toString() ?? '';
-  const bValue = b.data[orderBy]?.toString() ?? '';
+  const aRaw = a.data[orderBy];
+  const bRaw = b.data[orderBy];
+  const aValue = (isSortableCell(aRaw) ? aRaw.value : aRaw)?.toString() ?? '';
+  const bValue = (isSortableCell(bRaw) ? bRaw.value : bRaw)?.toString() ?? '';
   const isNumeric = !isNaN(parseFloat(aValue)) && !isNaN(parseFloat(bValue));
   const aCompared = isNumeric ? parseFloat(aValue) : aValue.toLowerCase();
   const bCompared = isNumeric ? parseFloat(bValue) : bValue.toLowerCase();

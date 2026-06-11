@@ -2,9 +2,14 @@ import React from 'react';
 
 import {Stack, Typography} from '@mui/material';
 import {formatDate} from '@/utils/formatter.utils';
-import {Alignment, FlexxColumn} from '@components/FlexxTable/domain/FlexxTable';
 import AdvanceCurrencyText from '@components/AdvanceCurrencyText/AdvanceCurrencyText';
 import AdvancePercentageText from '@components/AdvancePercentageText/AdvancePercentageText';
+import {
+  Alignment,
+  FlexxColumn,
+  FlexxTableRowDataType,
+  isSortableCell,
+} from '@components/FlexxTable/domain/FlexxTable';
 
 const parseCellContent = ({
   value,
@@ -12,13 +17,7 @@ const parseCellContent = ({
   shouldDisplayDate,
   isDateColumn,
 }: {
-  value:
-    | string
-    | number
-    | React.JSX.Element
-    | null
-    | undefined
-    | Array<string | number | React.JSX.Element | null | undefined>;
+  value: FlexxTableRowDataType;
   column: FlexxColumn;
   shouldDisplayDate: boolean;
   isDateColumn: boolean;
@@ -37,7 +36,9 @@ const parseCellContent = ({
     }
   };
 
-  if (Array.isArray(value)) {
+  if (isSortableCell(value)) {
+    cellContent = value.content;
+  } else if (Array.isArray(value)) {
     cellContent = (
       <Stack
         gap={'2rem'}

@@ -1,11 +1,22 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {JSX} from 'react';
 import {Comparator} from 'lodash';
+import {isValidElement, JSX, ReactNode} from 'react';
+
+type SortableCell = {value: string | number; content: ReactNode};
+
+const isSortableCell = (value: unknown): value is SortableCell =>
+  typeof value === 'object' &&
+  value !== null &&
+  !isValidElement(value) &&
+  !Array.isArray(value) &&
+  'value' in value &&
+  'content' in value;
 
 type FlexxTableRowDataType =
   | string
   | number
   | JSX.Element
+  | SortableCell
   | undefined
   | null
   | Array<string | number | JSX.Element | undefined | null>;
@@ -74,8 +85,9 @@ export type {
   Alignment,
   SortOrder,
   FlexxColumn,
+  SortableCell,
   FlexxTableRow,
   FlexxTableData,
   FlexxTableRowDataType,
 };
-export {cellColors};
+export {cellColors, isSortableCell};

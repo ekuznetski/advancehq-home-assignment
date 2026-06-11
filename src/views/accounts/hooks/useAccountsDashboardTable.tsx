@@ -26,14 +26,17 @@ const useAccountsDashboardTable = (
       data: {
         name: account.name,
         bank: account.bank_name,
-        accountNumber: account.account_number ? (
-          <AdvanceAccountNumberDisplay
-            accountNumber={account.account_number}
-            variant='body2'
-          />
-        ) : (
-          'N/A'
-        ),
+        accountNumber: account.account_number
+          ? {
+              value: account.account_number,
+              content: (
+                <AdvanceAccountNumberDisplay
+                  accountNumber={account.account_number}
+                  variant='body2'
+                />
+              ),
+            }
+          : 'N/A',
         status: account.status,
         balance: account.balance,
       },
