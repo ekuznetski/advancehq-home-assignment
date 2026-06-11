@@ -93,6 +93,7 @@ Be sure to let us know what you have added and why.
 2. The UI/UX
 3. The maintainability of the code
 
+
 ## Stack
 
 - Next.js 16 with App Router
@@ -100,7 +101,51 @@ Be sure to let us know what you have added and why.
 - TypeScript
 - MUI v5
 - Tailwind CSS
-- React Query v3
+- TanStack Query v5
 - React Hook Form
 
 For any questions contact orri.nehamkin@advancehq.com
+
+
+
+___
+
+## Additional Features & Improvements
+
+Beyond the four required tasks, the following were added — with the reasoning behind each:
+
+- **Migrated the data layer from `react-query` v3 to TanStack Query v5.** The v3 footprint
+  was tiny (one query, no mutations), and the assignment required building out a whole data
+  layer (mutations for Create Account / Move Money, queries for transactions). Migrating
+  first meant every new hook was written in the modern idiom — object-form `useQuery`, global
+  error handling via `QueryCache`/`MutationCache`, SSR-safe devtools — instead of building on
+  an end-of-life library.
+
+- **TanStack Query Devtools** wired into the app for inspecting cache, query keys, and
+  fetch states during development.
+
+- **Made the account search reliable.** The query key was a constant `[ACCOUNTS]` without the
+  search term, so React Query (which caches by key) did not refetch deterministically when the
+  term changed. The fix puts the term in the key (`[ACCOUNTS, term]`), plus debounced input,
+  `keepPreviousData` to avoid flicker, and a clear button shown only when there is a term.
+
+- **Fixed several bugs found in the provided code:**
+  - SSR hydration error from a `<Chip>` (a `div`) rendered inside a `<Typography>` paragraph.
+  - `origin is not defined` 500 crash on `/accounts` from a global `origin` passed as a prop.
+  - Drawers/modals could not be closed by clicking outside — the backdrop used
+    `visibility: hidden`, which also removes it from hit-testing; switched to a transparent
+    (but clickable) backdrop.
+
+- **Targeted `FlexxTable` sorting fix.** The table sorted the *rendered* cell value
+  (`data[field].toString()`), so the Account Number column — which renders a JSX component —
+  stringified to `[object Object]` and never sorted by the real number, and dates only sorted
+  via a bolted-on `comparator` + row-`metadata` workaround. Cells can now optionally be
+  `{ value, content }`: sorting uses `value`, rendering uses `content`. The account-number
+  column sorts by its real value and the date columns sort chronologically with the workaround
+  removed — a small, backward-compatible change to the table's sort/cell layer. I deliberately
+  did **not** rewrite the whole table onto `@tanstack/react-table`: all features already worked,
+  the rewrite would touch the shared primitive plus every call site for no user-visible gain,
+  and TanStack is headless so it would not remove the UI work. The restraint plus the
+  documented critique is the intended signal.
+
+
