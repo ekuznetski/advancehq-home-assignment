@@ -1,14 +1,19 @@
 import React from 'react';
 
 import {Stack} from '@mui/material';
+import {Account} from '@/domain/Account';
 import {useMoveMoney} from '@views/accounts/hooks/useMoveMoney';
 import {useCreateAccount} from '@views/accounts/hooks/useCreateAccount';
 import {ActionButtonConfig} from '@components/AdvanceActionButtons/types';
 import AdvanceActionButtons from '@components/AdvanceActionButtons/AdvanceActionButtons';
 
-const AccountsCtas: React.FC = () => {
+interface AccountsCtasProps {
+  onAccountCreated?: (account: Account) => void;
+}
+
+const AccountsCtas: React.FC<AccountsCtasProps> = ({onAccountCreated}) => {
   const {openDrawer: openCreateAccount, CreateAccountDrawer} =
-    useCreateAccount();
+    useCreateAccount(onAccountCreated);
   const {openDrawer: openMoveMoney, MoveMoneyDrawer} = useMoveMoney();
 
   const actions: ActionButtonConfig[] = [

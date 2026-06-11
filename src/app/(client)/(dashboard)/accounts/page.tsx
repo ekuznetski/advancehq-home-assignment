@@ -1,20 +1,22 @@
 'use client';
 
-import React from 'react';
-
 import {Typography} from '@mui/material';
-import FlexxDashboardWrapper from '@/components/FlexxDashboardWrapper';
-import AccountsDashboardTable from '@views/accounts/components/AccountsDashboardTable';
 import AccountsCtas from '@views/accounts/components/AccountsCtas';
+import FlexxDashboardWrapper from '@/components/FlexxDashboardWrapper';
+import {useAccountDetails} from '@views/accounts/hooks/useAccountDetails';
+import AccountsDashboardTable from '@views/accounts/components/AccountsDashboardTable';
 
 const AccountsPage = () => {
+  const {openDrawer, AccountDetailsDrawer} = useAccountDetails();
+
   return (
     <FlexxDashboardWrapper>
       <Typography variant='h4' sx={{fontWeight: 600}}>
         Accounts
       </Typography>
-      <AccountsCtas />
-      <AccountsDashboardTable />
+      <AccountsCtas onAccountCreated={openDrawer} />
+      <AccountsDashboardTable onRowClick={openDrawer} />
+      {AccountDetailsDrawer}
     </FlexxDashboardWrapper>
   );
 };
