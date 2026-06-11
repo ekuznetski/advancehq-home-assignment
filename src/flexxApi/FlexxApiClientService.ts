@@ -54,8 +54,6 @@ async function request<T>({
 
   const requestBody = body ? JSON.stringify(body) : undefined;
 
-  console.log(`[API] ${method} ${endpoint}`);
-
   const response = await fetch(url, {
     method,
     headers: requestHeaders,
@@ -66,11 +64,20 @@ async function request<T>({
   const parseResponseCallback =
     options?.parseResponseCallback ?? (res => res.json());
 
-  const data = await parseResponseCallback(response);
   const {status, ok} = response;
 
-  // Error Handling
+  // Error Handling — check the status BEFORE parsing. Error responses may carry
+  // an empty or non-JSON body (proxy timeouts, 500s), which would make
+  // res.json() throw a SyntaxError and bypass all the handling below.
   if (!ok) {
+    // eslint-disable-next-line
+    let data: any = null;
+    try {
+      data = await parseResponseCallback(response);
+    } catch {
+      // body was empty or not JSON — degrade gracefully, keep data = null
+    }
+
     if (errorMapper?.[status]) {
       monitoringService.captureEvent({
         event_id: MonitoringEventIds.API_RESPONSE_ERROR,
@@ -121,7 +128,8 @@ async function request<T>({
       `API Request failed with status ${status}: ${response.statusText}`,
     );
   }
-  return data;
+
+  return parseResponseCallback(response) as Promise<T>;
 }
 
 // GET function
