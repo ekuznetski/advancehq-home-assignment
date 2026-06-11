@@ -1,18 +1,18 @@
-import {keepPreviousData, useQuery} from '@tanstack/react-query';
-
 import {Account} from '@/domain/Account';
-import {QueryClientIds} from '@/QueryClient/queryClient.ids';
 import flexxApiService from '@/flexxApi/flexxApiService';
+import {QueryClientIds} from '@/QueryClient/queryClient.ids';
+import {keepPreviousData, useQuery} from '@tanstack/react-query';
 
 interface useFetchAccountsArgs {
   searchQuery?: string;
 }
 
 const useFetchAccounts = (args?: useFetchAccountsArgs) => {
+  const searchTerm = args?.searchQuery ?? '';
+
   return useQuery<Account[]>({
-    queryKey: [QueryClientIds.ACCOUNTS, args?.searchQuery ?? ''],
-    queryFn: () =>
-      flexxApiService().fetchAccounts({search_term: args?.searchQuery}),
+    queryKey: [QueryClientIds.ACCOUNTS, searchTerm],
+    queryFn: () => flexxApiService().fetchAccounts({search_term: searchTerm}),
     placeholderData: keepPreviousData,
   });
 };

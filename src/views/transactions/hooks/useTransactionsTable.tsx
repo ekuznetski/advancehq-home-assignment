@@ -1,14 +1,18 @@
 import {useMemo} from 'react';
 
 import {Transaction} from '@/domain/Transaction';
-import {formatTransactionDate} from '@/utils/transaction.utils';
 import {
   FlexxColumn,
   FlexxTableRow,
 } from '@components/FlexxTable/domain/FlexxTable';
+import {
+  byTransactionTimestamp,
+  formatTransactionDate,
+  transactionTimestamp,
+} from '@/utils/transaction.utils';
 
 const columns: FlexxColumn[] = [
-  {field: 'date', headerName: 'Date'},
+  {field: 'date', headerName: 'Date', comparator: byTransactionTimestamp},
   {field: 'account', headerName: 'Account'},
   {field: 'merchant', headerName: 'Merchant'},
   {field: 'amount', headerName: 'Amount', currency: true, align: 'right'},
@@ -29,6 +33,7 @@ const useTransactionsTable = (transactions: Transaction[] | undefined) => {
         direction: transaction.direction,
         status: transaction.status,
       },
+      metadata: {timestamp: transactionTimestamp(transaction.created_at)},
     }));
   }, [transactions]);
 

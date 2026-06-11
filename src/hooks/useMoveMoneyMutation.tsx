@@ -13,8 +13,13 @@ export const useMoveMoneyMutation = () => {
   return useMutation<unknown, Error, MoveMoneyPayload>({
     mutationFn: payload => flexxApiService().moveMoney(payload),
     onSuccess: () => {
-      // Balances changed on both accounts (and new transactions were created).
+      // Balances changed on both accounts and new transactions were created,
+      // so refresh accounts as well as every transaction list.
       queryClient.invalidateQueries({queryKey: [QueryClientIds.ACCOUNTS]});
+      queryClient.invalidateQueries({
+        queryKey: [QueryClientIds.ACCOUNT_TRANSACTIONS],
+      });
+      queryClient.invalidateQueries({queryKey: [QueryClientIds.TRANSACTIONS]});
       toast.success('Money moved successfully');
     },
   });

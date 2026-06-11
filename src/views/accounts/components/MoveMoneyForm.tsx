@@ -1,6 +1,6 @@
 'use client';
 
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Controller, useForm} from 'react-hook-form';
 
 import {LoadingButton} from '@mui/lab';
@@ -40,6 +40,7 @@ const MoveMoneyForm: React.FC<MoveMoneyFormProps> = ({
     control,
     handleSubmit,
     watch,
+    setValue,
     formState: {isValid},
   } = useForm<MoveMoneyFormValues>({
     mode: 'onChange',
@@ -51,14 +52,24 @@ const MoveMoneyForm: React.FC<MoveMoneyFormProps> = ({
   });
 
   const sourceId = watch('source_account_id');
+  const destinationId = watch('destination_account_id');
   const sourceAccount = accounts?.find(a => a.account_id === sourceId);
+
+  // If the destination ends up equal to the source, clear it: it is excluded
+  // from the options below, so RHF would otherwise keep a stale invalid value.
+  useEffect(() => {
+    if (destinationId && destinationId === sourceId) {
+      setValue('destination_account_id', '', {shouldValidate: true});
+    }
+  }, [sourceId, destinationId, setValue]);
 
   const sourceOptions = (accounts ?? []).map(toOption);
   const destinationOptions = (accounts ?? [])
     .filter(account => account.account_id !== sourceId)
     .map(toOption);
 
-  const onSubmit = handleSubmit(values =>
+  const onSubmit = handleSubmit(values => {
+    if (!confirmed) return;
     mutate(
       {
         source_account_id: values.source_account_id,
@@ -66,8 +77,8 @@ const MoveMoneyForm: React.FC<MoveMoneyFormProps> = ({
         amount: Number(values.amount),
       },
       {onSuccess: () => onSuccess?.()},
-    ),
-  );
+    );
+  });
 
   return (
     <Stack

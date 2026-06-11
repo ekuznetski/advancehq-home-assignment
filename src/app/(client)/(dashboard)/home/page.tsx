@@ -124,6 +124,7 @@ const Home = () => {
               ].map(([name, desc]) => (
                 <ListItem key={name} disableGutters>
                   <ListItemText
+                    disableTypography
                     primary={
                       <Stack direction='row' alignItems='center' gap={1}>
                         <Chip label={name} size='small' />
