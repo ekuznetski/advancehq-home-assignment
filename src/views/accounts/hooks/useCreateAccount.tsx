@@ -1,5 +1,5 @@
 import ReactDOM from 'react-dom';
-import React, {useMemo} from 'react';
+import {useMemo} from 'react';
 
 import {useBoolean} from '@/hooks/useBoolean';
 import DrawerWrapper from '@components/DrawerWrapper/DrawerWrapper';
@@ -27,8 +27,9 @@ export const useCreateAccount = () => {
           },
         ]}
         drawerWidth='md'
+        title='Create Account'
       >
-        <CreateAccountForm />
+        <CreateAccountForm onCreated={closeDrawer} />
       </DrawerWrapper>,
       document.body,
     );

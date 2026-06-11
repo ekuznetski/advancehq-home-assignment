@@ -1,8 +1,8 @@
 import React from 'react';
 
 import {Stack} from '@mui/material';
-import AdvanceActionButtons from '@components/AdvanceActionButtons/AdvanceActionButtons';
 import {ActionButtonConfig} from '@components/AdvanceActionButtons/types';
+import AdvanceActionButtons from '@components/AdvanceActionButtons/AdvanceActionButtons';
 import {useCreateAccount} from '@views/accounts/hooks/useCreateAccount';
 
 const AccountsCtas: React.FC = () => {
@@ -26,4 +26,5 @@ const AccountsCtas: React.FC = () => {
     </>
   );
 };
+
 export default AccountsCtas;

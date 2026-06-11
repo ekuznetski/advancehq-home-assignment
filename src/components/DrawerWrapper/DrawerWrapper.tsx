@@ -299,7 +299,7 @@ const DrawerWrapper: React.FC<DrawerWrapperProps> = ({
             sx={{
               width,
               padding,
-              gap: '2rem',
+              gap: '1rem',
               height: '100%',
               transition: theme.transitions.create('width', {
                 duration: 300,
@@ -308,7 +308,11 @@ const DrawerWrapper: React.FC<DrawerWrapperProps> = ({
               minWidth: isSmDown ? '100%' : '500px',
             }}
           >
-            {title && <Typography variant='h1'>{title}</Typography>}
+            {title && (
+              <Typography variant='h1' sx={{fontWeight: 700}}>
+                {title}
+              </Typography>
+            )}
             {children}
           </Stack>
         </Collapse>

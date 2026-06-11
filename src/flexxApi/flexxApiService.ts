@@ -1,5 +1,5 @@
+import {Account, CreateAccountPayload} from '@/domain/Account';
 import {get, post, put, remove} from '@/flexxApi/FlexxApiClientService';
-import {Account} from '@/domain/Account';
 
 class FlexxApiService {
   private formatQueryParams(
@@ -26,6 +26,10 @@ class FlexxApiService {
   async fetchAccounts(params: {search_term?: string}): Promise<Account[]> {
     const queryParams = this.formatQueryParams(params);
     return get<Account[]>({endpoint: `pages/accounts?${queryParams}`});
+  }
+
+  async createAccount(payload: CreateAccountPayload): Promise<Account> {
+    return post<Account>({endpoint: 'account', body: payload});
   }
 }
 

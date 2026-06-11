@@ -15,5 +15,10 @@ interface Account {
   balance: number;
 }
 
+type CreateAccountPayload = Pick<
+  Account,
+  'name' | 'routing_number' | 'account_number' | 'bank_name'
+>;
+
 export {AccountStatus};
-export type {Account};
+export type {Account, CreateAccountPayload};
