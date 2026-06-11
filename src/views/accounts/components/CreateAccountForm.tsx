@@ -6,8 +6,8 @@ import {Controller, useForm} from 'react-hook-form';
 import {Stack} from '@mui/material';
 import {LoadingButton} from '@mui/lab';
 import {Account, CreateAccountPayload} from '@/domain/Account';
+import {useCreateAccountMutation} from '@/hooks/useCreateAccountMutation';
 import FlexxTextField from '@components/FlexxCustomTextInputs/FlexxTextField';
-import {useCreateAccountMutation} from '@views/accounts/hooks/useCreateAccountMutation';
 import {buildValidationRules} from '@components/FlexxCustomTextInputs/domain/FlexxTextFieldValidators';
 
 interface CreateAccountFormProps {
