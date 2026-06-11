@@ -41,6 +41,7 @@ const MoveMoneyForm: React.FC<MoveMoneyFormProps> = ({
     handleSubmit,
     watch,
     setValue,
+    trigger,
     formState: {isValid},
   } = useForm<MoveMoneyFormValues>({
     mode: 'onChange',
@@ -53,6 +54,7 @@ const MoveMoneyForm: React.FC<MoveMoneyFormProps> = ({
 
   const sourceId = watch('source_account_id');
   const destinationId = watch('destination_account_id');
+  const amountValue = watch('amount');
   const sourceAccount = accounts?.find(a => a.account_id === sourceId);
 
   // If the destination ends up equal to the source, clear it: it is excluded
@@ -62,6 +64,16 @@ const MoveMoneyForm: React.FC<MoveMoneyFormProps> = ({
       setValue('destination_account_id', '', {shouldValidate: true});
     }
   }, [sourceId, destinationId, setValue]);
+
+  // The amount rule compares against the source account's balance. RHF only
+  // re-runs a field's validation when that field changes, so switching the
+  // source would otherwise leave a stale "exceeds balance" error (or a stale
+  // pass). Re-validate the amount whenever the source changes.
+  useEffect(() => {
+    if (amountValue) {
+      trigger('amount');
+    }
+  }, [sourceId, amountValue, trigger]);
 
   const sourceOptions = (accounts ?? []).map(toOption);
   const destinationOptions = (accounts ?? [])
