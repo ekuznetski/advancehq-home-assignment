@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react';
+import {useMemo} from 'react';
 
 import {Account} from '@/domain/Account';
 import {
@@ -15,7 +15,10 @@ const columns: FlexxColumn[] = [
   {field: 'balance', headerName: 'Balance', currency: true, align: 'right'},
 ];
 
-const useAccountsDashboardTable = (accounts: Account[] | undefined) => {
+const useAccountsDashboardTable = (
+  accounts: Account[] | undefined,
+  onRowClick?: (account: Account) => void,
+) => {
   const rows: FlexxTableRow[] = useMemo(() => {
     if (!accounts) return [];
 
@@ -34,8 +37,9 @@ const useAccountsDashboardTable = (accounts: Account[] | undefined) => {
         status: account.status,
         balance: account.balance,
       },
+      onClick: onRowClick ? () => onRowClick(account) : undefined,
     }));
-  }, [accounts]);
+  }, [accounts, onRowClick]);
 
   return {columns, rows};
 };

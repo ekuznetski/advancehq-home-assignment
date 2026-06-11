@@ -21,7 +21,7 @@ const AccountsCtas: React.FC = () => {
     {
       name: 'Move Money',
       variant: 'outlined',
-      onClick: openMoveMoney,
+      onClick: () => openMoveMoney(),
       startIcon: 'fluent--arrow-swap-16-regular',
     },
   ];

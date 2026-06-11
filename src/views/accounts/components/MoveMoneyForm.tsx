@@ -19,6 +19,7 @@ interface MoveMoneyFormValues {
 
 interface MoveMoneyFormProps {
   onSuccess?: () => void;
+  defaultSourceAccountId?: string;
 }
 
 const toOption = (account: Account): SelectOption => ({
@@ -27,7 +28,10 @@ const toOption = (account: Account): SelectOption => ({
   label: `${account.name} (${account.bank_name})`,
 });
 
-const MoveMoneyForm: React.FC<MoveMoneyFormProps> = ({onSuccess}) => {
+const MoveMoneyForm: React.FC<MoveMoneyFormProps> = ({
+  onSuccess,
+  defaultSourceAccountId,
+}) => {
   const {data: accounts} = useFetchAccounts();
   const [confirmed, setConfirmed] = useState(false);
   const {mutate, isPending} = useMoveMoneyMutation();
@@ -40,7 +44,7 @@ const MoveMoneyForm: React.FC<MoveMoneyFormProps> = ({onSuccess}) => {
   } = useForm<MoveMoneyFormValues>({
     mode: 'onChange',
     defaultValues: {
-      source_account_id: '',
+      source_account_id: defaultSourceAccountId ?? '',
       destination_account_id: '',
       amount: '',
     },

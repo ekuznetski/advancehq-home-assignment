@@ -1,16 +1,21 @@
-import {useMemo} from 'react';
 import ReactDOM from 'react-dom';
+import {useCallback, useMemo, useState} from 'react';
 
 import {useBoolean} from '@/hooks/useBoolean';
 import DrawerWrapper from '@components/DrawerWrapper/DrawerWrapper';
 import MoveMoneyForm from '@views/accounts/components/MoveMoneyForm';
 
 export const useMoveMoney = () => {
-  const {
-    value: isOpen,
-    onTrue: openDrawer,
-    onFalse: closeDrawer,
-  } = useBoolean();
+  const {value: isOpen, onTrue, onFalse: closeDrawer} = useBoolean();
+  const [sourceAccountId, setSourceAccountId] = useState<string>();
+
+  const openDrawer = useCallback(
+    (sourceId?: string) => {
+      setSourceAccountId(sourceId);
+      onTrue();
+    },
+    [onTrue],
+  );
 
   const MoveMoneyDrawer = useMemo(() => {
     if (typeof window === 'undefined') return null;
@@ -29,11 +34,15 @@ export const useMoveMoney = () => {
         drawerWidth='md'
         title='Move Money'
       >
-        <MoveMoneyForm onSuccess={closeDrawer} />
+        <MoveMoneyForm
+          key={sourceAccountId ?? 'none'}
+          onSuccess={closeDrawer}
+          defaultSourceAccountId={sourceAccountId}
+        />
       </DrawerWrapper>,
       document.body,
     );
-  }, [isOpen, closeDrawer]);
+  }, [isOpen, closeDrawer, sourceAccountId]);
 
   return {
     isOpen,
