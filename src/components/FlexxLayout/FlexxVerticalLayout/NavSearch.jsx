@@ -14,7 +14,7 @@ const NavSearch = () => {
   const {searchQuery, updateSearchQuery} = useGlobalSearch();
 
   const [localSearchTerm, setLocalSearchTerm] = useState('');
-  const [debouncedSearchTerm] = useDebounce(localSearchTerm, 500);
+  const [debouncedSearchTerm] = useDebounce(localSearchTerm, 300);
 
   useEffect(() => {
     setLocalSearchTerm(searchQuery);
@@ -51,11 +51,13 @@ const NavSearch = () => {
         </InputAdornment>
       }
       endAdornment={
-        <InputAdornment position='end'>
-          <IconButton onClick={handleClearSearch}>
-            <FlexxIcon icon='fluent--dismiss-16-regular' />
-          </IconButton>
-        </InputAdornment>
+        localSearchTerm && (
+          <InputAdornment position='end'>
+            <IconButton onClick={handleClearSearch}>
+              <FlexxIcon icon='fluent--dismiss-16-regular' />
+            </IconButton>
+          </InputAdornment>
+        )
       }
       size='small'
       style={{borderRadius: '3rem'}}
